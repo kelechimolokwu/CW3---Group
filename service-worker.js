@@ -1,4 +1,4 @@
-var cacheName = 'petstore-v1';
+var cacheName = 'afterschool';
 var cacheFiles = [
   'index.html',
   'lessons.js',

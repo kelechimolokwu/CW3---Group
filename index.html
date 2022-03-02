@@ -6,17 +6,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Afterschool</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
     <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
     <link rel="manifest" href="afterschool.webmanifest">
 </head>
 <body>
     <div id="app">
+        <!-- Nav -->
+        <div class="header">
+            <div class="logo">
+              <img src="images/afterschool.png" alt="logo">
+            </div>
+        </div>
 
     </div>
     <script src="lessons.js"></script>
-    <script>
-
+    <script type="text/javascript">
+        var webstore = new Vue({
+            el: '#app',
+            data: {
+                sitename: 'Afterschool',
+                lessons: lessons,
+                cart: [],
+                showLesson: true,
+                order: {
+                    firstName: '',
+                    lastName: '',
+                    address: '',
+                    city: '',
+                    zip: '',
+                    state: '',
+                    gift: 'Order as a gift',
+                    sendGift: 'Send as a gift',
+                    dontSendGift: "Don't send as a gift",
+                    method: 'Home'
+                },
+                states: {
+                    AL: 'Alabama',
+                    AR: 'Arizona',
+                    CA: 'California',
+                    NV: 'Nashville'
+                }
+            },
+            methods: {
+                addToCart(lesson) {
+                    this.cart.push(lesson.id);
+                    // console.log(this.cart)
+                },
+                showCheckout() {
+                    // console.log(this.showLesson);
+                    this.showLesson = this.showLesson ? false : true;
+                },
+                cartCount (id) {
+                    let count = 0
+                    for (let i = 0; i < this.cart.length; i++) {
+                        if (this.cart[i] === id) {
+                            count++
+                        }
+                    }
+                    return count
+                },
+                canAddToCart(lesson) {
+                    return lesson.availableInventory > this.cartCount(lesson.id);
+                },
+                submitForm() {
+                    alert('Order submitted!')
+                }
+            },
+            computed: {
+                cartItemCount() {
+                    return this.cart.length ;
+                },
+                sortedLessons () {
+                    let lessonsArray = this.lessons.slice(0)
+                    function compare(a, b) {
+                        if (a.price > b.price)
+                            return 1;
+                        if (a.price < b.price)
+                            return -1
+                        return 0
+                    }
+                    return lessonsArray.sort(compare)
+                }
+            },
+        });
     </script>
 </body>
 </html>

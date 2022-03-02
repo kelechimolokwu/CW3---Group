@@ -9,7 +9,7 @@ var cacheFiles = [
   'images/physics.png',
   'images/icon-store-512.png',
   'images/afterschool.png',
-  'images/favicon.png'
+  'images/favicon.png',
 ];
 
 // CACHING THE FILES IN THE SERVICE WORKER [cacheFiles] ARRAY

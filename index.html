@@ -7,18 +7,141 @@
     <title>Afterschool</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
     <link rel="manifest" href="afterschool.webmanifest">
+    <script>
+        if('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        };
+    </script>
 </head>
 <body>
     <div id="app">
         <!-- Nav -->
-        <div class="header">
-            <div class="logo">
-              <img src="images/afterschool.png" alt="logo">
+            <div class="header">
+                <div class="logo">
+                <img src="images/afterschool.png" alt="logo">
+                </div>
+                <span>
+                    <button v-on:click='showCheckout' class="primary-btn">
+                        <span class="fas"></span>Checkout &nbsp
+                        {{cartItemCount}}
+                    </button>
+                </span>
             </div>
-        </div>
+        <!-- Lessons -->
+        <section class="main-sec">
+            <div v-if='showLesson'>
+                <div v-for="lesson in sortedLessons">
+                    <figure>
+                        <img v-bind:src="lesson.image" class="lesson-img">
+                    </figure>
+                    <h2 v-text="lesson.title"></h2>
+                    <p v-html="lesson.description"></p>
+                    <p>Price: {{lesson.price}}</p>
+                    <p>Available stock: {{lesson.availableInventory}}</p>
+                    <button class="primary-btn" v-on:click='addToCart(lesson)' v-if='canAddToCart(lesson)'>Add to cart</button>
+                    <button disabled="disabled" v-else>Add to cart</button>
+                    <span v-if="lesson.availableInventory - cartItemCount === 1">
+                        Buy Now!
+                    </span>
+                    <span v-else-if="lesson.availableInventory - cartItemCount === 0">
+                        All out!
+                    </span>
+                    <span v-else-if="lesson.availableInventory - cartItemCount < 5">
+                        Only {{ lesson.availableInventory - cartItemCount }} left!
+                    </span>
+                    <p></p>
+                    <div class="star-rating">
+                        <span v-for="n in lesson.rating" class="fas fa-star"></span>
+                        <span v-for="n in 5-lesson.rating" class="far fa-star"></span>
+                    </div>
+                </div>
+            </div>
+            <div v-else>
+                <h2>Checkout</h2>
+                <p>
+                    <strong>First Name: </strong>
+                    <input v-model.trim="order.firstName" >
+                </p>
+                <p>
+                    <strong>Last Name: </strong>
+                    <input v-model.trim="order.lastName" >
+                </p>
+                <p>
+                    <strong>Address: </strong>
+                    <input v-model="order.address" >
+                </p>
+                <p>
+                    <strong>City: </strong>
+                    <input v-model="order.city" >
+                </p>
+                <p>
+                    <strong>State: </strong>
+                    <select v-model="order.state">
+                        <option disabled value="">
+                            State
+                        </option>
+                        <option v-for="(state, key) in states" v-bind:value="state">
+                            {{ key }}
+                        </option>
+                    </select>
+                </p>
+                <p>4
+                    <strong>Zip/Postal Code: </strong>
+                    <input v-model.number="order.zip" >
+                </p>
+                <p>
+                    <label for="gift">
+                        Order as gift?
+                        <input v-model="order.gift" type="checkbox" name="gift" id="gift" v-bind:true-value="order.sendGift" v-bind:false-value="order.dontSendGift">
+                    </label>
+                </p>
+                <p>
+                    <label for="home">
+                        Home
+                        <input v-model="order.method" type="radio" value="Home" name="home" id="home">
+                    </label>
+                    <label for="business">
+                        Business
+                        <input v-model="order.method" type="radio" value="Business" name="home" id="business">
+                    </label>
+                </p>
+                <h2>Order Information</h2>
+                <p>
+                    First Name: {{ order.firstName }}
+                </p>
+                <p>
+                    Last Name: {{ order.lastName }}
+                </p>
+                <p>
+                    Address: {{ order.address }}
+                </p>
+                <p>
+                    City: {{ order.city }}
+                </p>
+                <p>
+                    State: {{ order.state }}
+                </p>
+                <p>
+                    Zip: {{ order.zip }}
+                </p>
+                <p>
+                    Gift?: {{ order.gift }}
+                </p>
+                <p>
+                    Delivery Method: {{ order.method }}
+                </p>
+                <button v-on:click="submitForm">
+                    Place Order
+                </button>
+            </div>
+        </section>
+
+
+
+
 
     </div>
     <script src="lessons.js"></script>

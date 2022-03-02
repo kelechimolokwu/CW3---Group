@@ -2,14 +2,15 @@ var cacheName = 'afterschool';
 var cacheFiles = [
   'index.html',
   'lessons.js',
+  'styles.css',
   'afterschool.webmanifest',
-  'images/biology.png',
-  'images/chemistry.png',
-  'images/math.png',
-  'images/physics.png',
-  'images/icon-store-512.png',
-  'images/afterschool.png',
-  'images/favicon.png',
+  '/images/biology.png',
+  '/images/chemistry.png',
+  '/images/math.png',
+  '/images/physics.png',
+  '/images/icon-512.png',
+  '/images/after.png',
+  '/images/favicon.png'
 ];
 
 // CACHING THE FILES IN THE SERVICE WORKER [cacheFiles] ARRAY
@@ -21,16 +22,16 @@ self.addEventListener('install', (e) => {
     }))
   })
   
-  // USING THE CACHED FILES
-  // self.addEventListener('fetch', function (e) {
-  //   e.respondWith(
-  //     // check if the cache has the file
-  //     caches.match(e.request).then((r) => {
-  //       console.log('[Service Worker] Fetching resource: ' + e.request.url)
-  //       return r
-  //     })
-  //   )
-  // })
+//   USING THE CACHED FILES
+  self.addEventListener('fetch', function (e) {
+    e.respondWith(
+      // check if the cache has the file
+      caches.match(e.request).then((r) => {
+        console.log('[Service Worker] Fetching resource: ' + e.request.url)
+        return r
+      })
+    )
+  })
   
   // CACHING NEW FILES
   self.addEventListener('fetch', function (e) {

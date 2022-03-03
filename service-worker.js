@@ -4,6 +4,7 @@ var cacheFiles = [
   'lessons.js',
   'styles.css',
   'afterschool.webmanifest',
+  'service-worker.js',
   '/images/biology.png',
   '/images/chemistry.png',
   '/images/math.png',
